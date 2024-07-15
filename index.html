@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <title>Les petits plats</title>
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <link href="style.css" rel="stylesheet" type="text/css"/>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
+        <script src="https://kit.fontawesome.com/f79972fb3e.js" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <header>
+            <img src="images/Logo.svg" alt="Logo - Les petits plats" class="logo">
+            <h1>CHERCHEZ PARMI PLUS DE 1500 RECETTES <br>
+                DU QUOTIDIEN,SIMPLES ET DÉLICIEUSES</h1>
+            <div class="main-search-container">
+                <form class="main-search">
+                    <input type="text" placeholder="Rechercher une recette, un ingrédient, ..." class="main-search-input">
+                    <button type="submit" class="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+                </form>
+            </div>
+        </header>
+        <main>
+            <div class="filter-banner">
+                <div class="filter-container">
+                    <div class="filter">
+                        <button class="drop-btn drop-btn--ingredient">
+                        <div>Ingrédients</div>
+                        <i class="fa-solid fa-chevron-down chevron--ingredient"></i>
+                        </button>
+                        <div class="filter-dropdown filter-dropdown--ingredient">
+                            <div>test 1</div>
+                            <div>test 2</div>
+                            <div>test 1</div>
+                            <div>test 2</div>
+                            <div>test 1</div>
+                            <div>test 2</div>
+                        </div>
+                    </div>
+                    <div class="filter">
+                        <button class="drop-btn drop-btn--appareil">
+                        <div>Appareils</div>
+                        <i class="fa-solid fa-chevron-down chevron--appareil"></i>
+                        </button>
+                        <div class="filter-dropdown filter-dropdown--appareil">
+                            <div>test 1</div>
+                            <div>test 2</div>
+                            <div>test 1</div>
+                            <div>test 2</div>
+                            <div>test 1</div>
+                            <div>test 2</div>
+                        </div>
+                    </div>
+                    <div class="filter">
+                        <button class="drop-btn drop-btn--ustensile">
+                        <div>Ustensiles</div>
+                        <i class="fa-solid fa-chevron-down chevron--ustensile"></i>
+                        </button>
+                        <div class="filter-dropdown filter-dropdown--ustensile">
+                            <div>test 1</div>
+                            <div>test 2</div>
+                            <div>test 1</div>
+                            <div>test 2</div>
+                            <div>test 1</div>
+                            <div>test 2</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="recipe-number"></div>
+            </div>
+            <div class="recipe-section"></div>
+        </main>
+        <script src="scripts/recipeTemplate.js"></script>
+        <script src="scripts/index.js"></script>
+    </body>
+</html>

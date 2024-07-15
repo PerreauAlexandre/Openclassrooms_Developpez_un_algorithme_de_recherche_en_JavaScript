@@ -1,0 +1,250 @@
+*,
+*::after,
+*::before {
+    margin: 0;
+    padding: 0;
+    box-sizing: inherit;
+}
+
+body {
+    box-sizing: border-box;
+    font-family: "Manrope", sans-serif;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+
+
+/* header */
+
+header {
+    height: 667px;
+    background-image: url(../images/lampos-aritonang-24gR_9lCdes-unsplash.png);
+    background-size: cover;
+    background-position: center;
+}
+
+.logo {
+    margin-top: 51px;
+    margin-left: 69px;
+    width: 207px;
+    height: auto;
+}
+
+h1 {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 170px;
+    font-family: "Anton", sans-serif;
+    font-size: 44px;
+    font-weight: 400;
+    color: #FFD15B;
+    text-align: center;
+}
+
+.main-search-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 29px;
+}
+
+.main-search {
+    width: 954px;
+    height: 72px;
+    border-radius: 11px;
+    background-color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 35px;
+    padding-right: 10px;
+}
+
+.main-search-input {
+    border: none;
+    font: inherit;
+    width: 850px;
+    height: 100%;
+}
+
+.main-search-input:focus {
+    border: none;
+    outline: none;
+}
+
+.search-btn {
+    width: 52px;
+    height: 52px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #1B1B1B;
+    font-size: 28px;
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+}
+
+.search-btn:hover, .search-btn:active {
+    background-color: #FFD15B;
+    color: #000000;
+}
+
+
+/* Main */
+main {
+    background-color: #EDEDED;
+}
+
+/* Filter */
+.filter-banner {
+    color: #1B1B1B;
+    padding: 20px 100px 0 100px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.filter-container {
+    display: flex;
+    gap: 66px;
+}
+
+.filter {
+    position: relative;
+    width: 195px;
+    height: 56px;
+}
+
+.drop-btn {
+    width: 100%;
+    height: 100%;
+    border-radius: 11px;
+    padding: 0 16px;
+    border: none;
+    font-size: 16px;
+    font-weight: 500;
+    color: inherit;
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    background-color: #FFFFFF;
+}   
+
+.fa-chevron-down {
+    transition: transform 0.3s ease-in-out;
+}
+
+.filter-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1;
+    width: 100%;
+    max-height: 259px;
+    border-radius: 0 0 11px 11px;
+    overflow: hidden;
+    padding: 0 16px;
+    background-color: #FFFFFF;
+}
+
+.recipe-number {
+    display: flex;
+    align-items: center;
+    font-family: "Anton", sans-serif;
+    font-size: 21px;
+}
+
+/* Recipes */
+.recipe-section {
+    padding: 55px 100px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    row-gap: 66px;
+    column-gap: 50px;
+}
+
+.recipe-card {
+    position: relative;
+    width: calc(33.33% - 100px/3);
+    height: 731px;
+    border-radius: 21px;
+    overflow: hidden;
+    background-color: #FFFFFF;
+    color: #1B1B1B;
+}
+
+.recipe-card img {
+    width: 100%;
+    height: 253px;
+    object-fit: cover;
+}
+
+.time {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 63px;
+    height: 26px;
+    border-radius: 10.5px;
+    background-color: #FFD15B;
+    font-size: 12px;
+}
+
+.card-content {
+    width: 100%;
+    height: 478px;
+    padding: 32px 25px;
+}
+
+.card-content h2 {
+    font-family: "Anton", sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    color: #000000;
+}
+
+.card-content h3 {
+    margin-top: 30px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #7A7A7A;
+}
+
+.card-content p {
+    height: 76px;
+    margin-top: 15px;
+    font-size: 14px;
+    overflow: hidden;
+}
+
+.ingredients-list {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.ingredient {
+    width: calc(50% - 5px);
+    font-size: 14px;
+}
+
+.ingredient h4{
+    font-weight: 500;
+}
+
+.ingredient div {
+    color: #7A7A7A;
+}
