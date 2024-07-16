@@ -14,6 +14,14 @@ class RecipeTemplate {
         return this._name;
     }
 
+    get ingredients() {
+        return this._ingredients;
+    }
+
+    get description() {
+        return this._description;
+    }
+
     getRecipeCardDOM() {
         const article = document.createElement("article");
         article.classList.add("recipe-card");
@@ -77,5 +85,14 @@ class RecipeTemplate {
         article.appendChild(a);
 
         return (article);
+    }
+
+    get getRecipeSearchDatas() {
+        let recipeSearchDatas = "";
+        recipeSearchDatas += this._name + "\n";
+        const ingredientArray = this._ingredients.map(ingredient => ingredient.ingredient);
+        recipeSearchDatas += ingredientArray.join(" ") + "\n";
+        recipeSearchDatas += this._description;
+        return recipeSearchDatas
     }
 }

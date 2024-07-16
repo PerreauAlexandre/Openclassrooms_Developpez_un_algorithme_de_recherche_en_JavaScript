@@ -9,9 +9,6 @@ async function initIndexPage() {
     const recipes = await getDatas();
     initalRecipesModel = recipes.map(recipe => new RecipeTemplate(recipe));
     recipesModel = initalRecipesModel;
-    console.log(recipesModel.length, initalRecipesModel.length);
-    console.log(recipesModel[0])
-    console.log(recipesModel[0].name);
     displayData();
 }
 
@@ -63,13 +60,16 @@ const mainSearchInput = document.querySelector(".main-search-input");
 mainSearchInput.addEventListener("input", function(event) {
     const inputValue = event.target.value
     if (inputValue.length >= 3) {
-        recipesModel = recipesModel.filter((recipeModel) => recipeModel.name.includes(inputValue));
-        console.log(recipesModel.length, initalRecipesModel.length);
+        recipesModel = initalRecipesModel.filter((recipeModel) => {
+            const recipeSearchDatas = recipeModel.getRecipeSearchDatas;
+            return recipeSearchDatas.toLowerCase().includes(inputValue.toLowerCase());
+        });
     }
-    // else {
-    //     newRecipesModel = initalRecipesModel;
-    // }
-    // if (newRecipesModel)
+    else {
+        recipesModel = initalRecipesModel;
+    }
+    recipeSection.innerHTML = "";
+    displayData();
 });
 
 
