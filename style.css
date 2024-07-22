@@ -16,7 +16,14 @@ a {
     text-decoration: none;
 }
 
+button {
+    border: none;
+    cursor: pointer;
+}
 
+ul {
+    list-style-type: none;
+}
 
 /* header */
 
@@ -67,7 +74,7 @@ h1 {
 .main-search-input {
     border: none;
     font: inherit;
-    width: 850px;
+    width: calc(100% - 105px);
     height: 100%;
 }
 
@@ -86,13 +93,22 @@ h1 {
     background-color: #1B1B1B;
     font-size: 28px;
     color: #ffffff;
-    border: none;
-    cursor: pointer;
 }
 
 .search-btn:hover, .search-btn:active {
     background-color: #FFD15B;
     color: #000000;
+}
+
+.clear-btn {
+    width: 52px;
+    height: 52px;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    font-size: 13px;
+    color: #7A7A7A;
+    background-color: #FFFFFF;
 }
 
 
@@ -101,17 +117,19 @@ main {
     background-color: #EDEDED;
 }
 
-/* Filter */
+/* Filter secondary*/
 .filter-banner {
     color: #1B1B1B;
     padding: 20px 100px 0 100px;
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
 }
 
 .filter-container {
     display: flex;
-    gap: 66px;
+    gap: 50px;
 }
 
 .filter {
@@ -125,7 +143,6 @@ main {
     height: 100%;
     border-radius: 11px;
     padding: 0 16px;
-    border: none;
     font-size: 16px;
     font-weight: 500;
     color: inherit;
@@ -133,7 +150,6 @@ main {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    cursor: pointer;
     background-color: #FFFFFF;
 }   
 
@@ -150,9 +166,80 @@ main {
     width: 100%;
     max-height: 259px;
     border-radius: 0 0 11px 11px;
-    overflow: hidden;
-    padding: 0 16px;
+    overflow: scroll;
     background-color: #FFFFFF;
+    font-size: 14px;
+}
+
+.filter-dropdown::-webkit-scrollbar {
+    display: none;
+}
+
+.secondary-search {
+    width: calc(100% - 32px);
+    height: 36px;
+    margin: 0 16px;
+    border-radius: 2px;
+    border: 1px solid #C6C6C6;
+    background-color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #7A7A7A;
+}
+
+.secondary-search-input {
+    border: none;
+    font: inherit;
+    width: calc(100% - 55px);
+    height: 100%;
+    padding-left: 8px;
+    color: inherit;
+}
+
+.secondary-search-input:focus {
+    border: none;
+    outline: none;
+}
+
+.secondary-search-btn {
+    width: 25px;
+    height: 25px;
+    margin-right: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    color: inherit;
+    background-color: inherit;
+}
+
+.secondary-clear-btn {
+    width: 25px;
+    height: 25px;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    font-size: 8px;
+    color: inherit;
+    background-color: inherit;
+}
+
+.selected-secondary-filter, .secondary-filter-list {
+    margin-top: 15px;
+    padding: 0 16px;
+    color: #1B1B1B;
+}
+
+.selected-secondary-filter {
+    background-color: #FFD15B;
+}
+
+.selected-secondary-filter li, .secondary-filter-list li {
+    height: 37px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
 }
 
 .recipe-number {
@@ -160,6 +247,33 @@ main {
     align-items: center;
     font-family: "Anton", sans-serif;
     font-size: 21px;
+}
+
+/* Actives filters */
+.active-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 20px 100px 0 100px;
+}
+
+.active-filters ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.active-filters li {
+    width: 203px;
+    height: 53px;
+    border-radius: 10px;
+    background-color: #FFD15B;
+    font-size: 14px;
+    padding: 0 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
 }
 
 /* Recipes */
@@ -247,4 +361,47 @@ main {
 
 .ingredient div {
     color: #7A7A7A;
+}
+
+@media screen and (max-width: 1024px) {
+    .main-search {
+        width: 650px;
+    }
+
+    .filter-container {
+        gap: 20px;
+    }
+
+    .filter-banner, .active-filters, .recipe-section {
+        padding-left: 50px;
+        padding-right: 50px;
+    }
+
+    .recipe-card {
+        width: calc(50% - 50px/2);
+    }
+}
+
+@media screen and (max-width: 768px) {
+    h1 {
+        padding: 0 20px;
+        font-size: 28px;
+    }
+
+    .main-search {
+        width: 90%;
+    }
+
+    .filter-container {
+        flex-direction: column;
+    }
+
+    .filter-banner, .active-filters, .recipe-section {
+        padding-left: 50px;
+        padding-right: 50px;
+    }
+
+    .recipe-card {
+        width: 100%;
+    }
 }

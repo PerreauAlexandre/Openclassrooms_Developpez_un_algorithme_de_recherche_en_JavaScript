@@ -87,12 +87,17 @@ class RecipeTemplate {
         return (article);
     }
 
-    get getRecipeSearchDatas() {
+    getRecipeSearchDatas() {
         let recipeSearchDatas = "";
         recipeSearchDatas += this._name + "\n";
         const ingredientArray = this._ingredients.map(ingredient => ingredient.ingredient);
         recipeSearchDatas += ingredientArray.join(" ") + "\n";
         recipeSearchDatas += this._description;
-        return recipeSearchDatas
+        return recipeSearchDatas;
+    }
+
+    getRecipeIngredientsList() {
+        const recipeIngredientsList = this._ingredients.map(ingredient => ingredient.ingredient);
+        return recipeIngredientsList;
     }
 }
