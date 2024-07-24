@@ -10,7 +10,7 @@ async function initIndexPage() {
     initialRecipesModel = recipes.map(recipe => new RecipeTemplate(recipe));
     recipesModel = initialRecipesModel;
     displayData(recipesModel);
-    initSecondaryFilter();
+    initSecondaryFilters();
 }
 
 
@@ -58,7 +58,8 @@ function displayRecipeNumber(recipes) {
 }
 
 
-// Filtre de recherche principal
+/********** Filtre principal **********/
+
 const mainSearchForm = document.querySelector(".main-search");
 const mainSearchInput = document.querySelector(".main-search-input");
 const searchBtn = document.querySelector(".search-btn");
@@ -78,7 +79,7 @@ mainSearchInput.addEventListener("input", (e) => {
         recipesModel = initialRecipesModel;
     }
     displayData(recipesModel);
-    initSecondaryFilter();
+    initSecondaryFilters();
 });
 
 mainSearchForm.addEventListener("submit", (e) => {
@@ -97,10 +98,13 @@ clearBtn.addEventListener("click", (e) => {
     mainSearchInput.value = "";
     recipesModel = initialRecipesModel;
     displayData(recipesModel);
-    initSecondaryFilter();
+    initSecondaryFilters();
 });
 
-// Filtres secondaires
+
+/********** Filtres secondaires **********/
+
+// Gestion de l'affichage des filtres
 const filters = document.querySelectorAll(".filter");
 filters.forEach((filter) => {
     let dropBtnOpen = false;
@@ -123,132 +127,218 @@ filters.forEach((filter) => {
     });
 });
 
-let initialIngredientsList = [];
-let ingredientsList = [];
-let activeIngredientFilter = [];
-const filterIngredients = document.querySelector(".filter--ingredients");
-const selectedIngredientsList = filterIngredients.querySelector(".selected-secondary-filter");
-const ingredientsFilterList = filterIngredients.querySelector(".secondary-filter-list");
-
-function initSecondaryFilter() {
-    fillIngredientFilter(recipesModel);
-    displayIngredientFilter(initialIngredientsList);
-    activeIngredientFilter = [];
-    displayActiveIngredientFilter();
+// On crée un objet ingrédients
+const ingredientsObject = {
+    initialList: [],
+    list: [],
+    activeFilter: [],
+    filter: document.querySelector(".filter--ingredients"),
+    secondarySearchForm: document.querySelector(".filter--ingredients .secondary-search"),
+    secondarySearchInput: document.querySelector(".filter--ingredients .secondary-search-input"),
+    secondaryClearBtn: document.querySelector(".filter--ingredients .secondary-clear-btn"),
+    selectedList: document.querySelector(".filter--ingredients .selected-secondary-filter"),
+    filterList: document.querySelector(".filter--ingredients .secondary-filter-list") 
 }
 
-function fillIngredientFilter(recipes) {
-    initialIngredientsList = [];
+initSecondarySearch(ingredientsObject);
+
+// On crée un objet appareils
+const appareilsObject = {
+    initialList: [],
+    list: [],
+    activeFilter: [],
+    filter: document.querySelector(".filter--appareils"),
+    secondarySearchForm: document.querySelector(".filter--appareils .secondary-search"),
+    secondarySearchInput: document.querySelector(".filter--appareils .secondary-search-input"),
+    secondaryClearBtn: document.querySelector(".filter--appareils .secondary-clear-btn"),
+    selectedList: document.querySelector(".filter--appareils .selected-secondary-filter"),
+    filterList: document.querySelector(".filter--appareils .secondary-filter-list") 
+}
+
+initSecondarySearch(appareilsObject);
+
+// On crée un objet ustensiles
+const ustensilesObject = {
+    initialList: [],
+    list: [],
+    activeFilter: [],
+    filter: document.querySelector(".filter--ustensiles"),
+    secondarySearchForm: document.querySelector(".filter--ustensiles .secondary-search"),
+    secondarySearchInput: document.querySelector(".filter--ustensiles .secondary-search-input"),
+    secondaryClearBtn: document.querySelector(".filter--ustensiles .secondary-clear-btn"),
+    selectedList: document.querySelector(".filter--ustensiles .selected-secondary-filter"),
+    filterList: document.querySelector(".filter--ustensiles .secondary-filter-list") 
+}
+
+initSecondarySearch(ustensilesObject);
+
+// On initialise les valeurs de filtres secondaire en fonction de la recherche principale
+function initSecondaryFilters() {
+    initSecondaryFilter(ingredientsObject);
+    initSecondaryFilter(appareilsObject);
+    initSecondaryFilter(ustensilesObject);
+}
+
+function initSecondaryFilter(filterObject) {
+    fillFilter(recipesModel, filterObject);
+    displayFilter(filterObject);
+    filterObject.activeFilter = [];
+    displayActiveFilter(filterObject);
+}
+
+
+
+// On rempli en fonction des attributs des recetes affichés sur la page le filtre secondaire passé en paramètre
+function fillFilter(recipes, filterObject) {
+    filterObject.initialList = [];
     recipes.forEach((recipeModel) => {
-        const recipeIngredientsList = recipeModel.getRecipeIngredientsList();
-        initialIngredientsList = initialIngredientsList.concat(recipeIngredientsList);
+        if (filterObject.filter.classList.contains("filter--ingredients")) {
+            filterObject.initialList = filterObject.initialList.concat(recipeModel.getRecipeIngredientsList());
+        }
+        else if (filterObject.filter.classList.contains("filter--appareils")) {
+            filterObject.initialList.push(recipeModel.appliance);
+        }
+        else if (filterObject.filter.classList.contains("filter--ustensiles")) {
+            filterObject.initialList = filterObject.initialList.concat(recipeModel.ustensils);
+        }        
     });
-    initialIngredientsList = [...new Set(initialIngredientsList)];
+    filterObject.initialList = [...new Set(filterObject.initialList)];
+    filterObject.list = filterObject.initialList;
 }
 
-function displayIngredientFilter(ingredients) {
-    ingredientsFilterList.innerHTML = "";
-    ingredients.forEach((ingredient) => {
+// On affiche dans le menu déroulant les différentes options du filtre secondaire passé en paramètre
+function displayFilter(filterObject) {
+    filterObject.filterList.innerHTML = "";
+    filterObject.list.forEach((listElement) => {
         const li = document.createElement("li");
-        li.textContent = ingredient;
-        ingredientsFilterList.appendChild(li);
+        li.textContent = listElement;
+        filterObject.filterList.appendChild(li);
     })
 
-    const DOMIngredientList = ingredientsFilterList.querySelectorAll("li");
-    DOMIngredientList.forEach((DOMIngredient) => {
-        DOMIngredient.addEventListener("click", () => {
-            activeIngredientFilter.push(DOMIngredient.textContent);
-            activeIngredientFilter = [...new Set(activeIngredientFilter)];
-            displayActiveIngredientFilter();
-            secondarySearchInput.value = "";
+    const DOMList = filterObject.filterList.querySelectorAll("li");
+    DOMList.forEach((DOMElement) => {
+        DOMElement.addEventListener("click", () => {
+            filterObject.activeFilter.push(DOMElement.textContent);
+            filterObject.activeFilter = [...new Set(filterObject.activeFilter)];
+            displayActiveFilter(filterObject);
+            filterObject.secondaryClearBtn.style.display = "none";
+            filterObject.secondarySearchInput.value = "";
         });
     });
 }
 
-const secondarySearchForm = document.querySelector(".secondary-search")
-const secondarySearchInput = document.querySelector(".secondary-search-input")
-const secondaryClearBtn = document.querySelector(".secondary-clear-btn");
-secondarySearchInput.addEventListener("input", (e) => {
-    const inputValue = e.target.value
-    if (inputValue.length >= 3) {
-        secondaryClearBtn.style.display = "flex";
-        ingredientsList = initialIngredientsList.filter((ingredient) => {
-            return ingredient.toLowerCase().includes(inputValue.toLowerCase());
-        });
-    }
-    else {
-        secondaryClearBtn.style.display = "none";
-        ingredientsList = initialIngredientsList;
-    }
-    displayIngredientFilter(ingredientsList);
-});
-
-secondarySearchForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-});
-
-secondarySearchForm.querySelector('input[type="text"]').addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
+// On initialise la barre de recherche du filtre secondaire passé en paramètre
+function initSecondarySearch(filterObject) {
+    filterObject.secondarySearchInput.addEventListener("input", (e) => {
+        const inputValue = e.target.value
+        if (inputValue.length >= 3) {
+            filterObject.secondaryClearBtn.style.display = "flex";
+            filterObject.list = filterObject.initialList.filter((listElement) => {
+                return listElement.toLowerCase().includes(inputValue.toLowerCase());
+            });
+        }
+        else {
+            filterObject.secondaryClearBtn.style.display = "none";
+            filterObject.list = filterObject.initialList;
+        }
+        displayFilter(filterObject);
+    });
+    
+    filterObject.secondarySearchForm.addEventListener("submit", (e) => e.preventDefault());
+    
+    filterObject.secondarySearchForm.querySelector('input[type="text"]').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+        }
+    });
+    
+    filterObject.secondaryClearBtn.addEventListener("click", (e) => {
         e.preventDefault();
-    }
-});
+        filterObject.secondaryClearBtn.style.display = "none";
+        filterObject.secondarySearchInput.value = "";
+        filterObject.list = filterObject.initialList;
+        displayFilter(filterObject);
+    });
+}
 
-secondaryClearBtn.addEventListener("click", (e) => {
-    e.preventDefault();
-    secondaryClearBtn.style.display = "none";
-    secondarySearchInput.value = "";
-    displayIngredientFilter(initialIngredientsList);
-});
 
-const activeIngredientsBanner = document.querySelector(".active-ingredients");
+const activeFiltersBanner = document.querySelector(".active-filters-banner");
+function displayActiveFilter(filterObject) {
+    filterObject.selectedList.innerHTML = "";
 
-function displayActiveIngredientFilter() {
-    selectedIngredientsList.innerHTML = "";
-    activeIngredientsBanner.innerHTML = "";
-    activeIngredientFilter.forEach((activeIngredient) => {
+    filterObject.activeFilter.forEach((activeElement) => {
         const li = document.createElement("li");
-        li.textContent = activeIngredient;
-        selectedIngredientsList.appendChild(li);
-
-        const liActiveBanner = document.createElement("li");
-        liActiveBanner.textContent = activeIngredient;
-        const closeLogo = document.createElement("i");
-        closeLogo.classList.add("fa-solid");
-        closeLogo.classList.add("fa-xmark");
-        liActiveBanner.appendChild(closeLogo)
-        activeIngredientsBanner.appendChild(liActiveBanner);
+        li.textContent = activeElement;
+        filterObject.selectedList.appendChild(li); 
     })
 
-    const DOMIngredientActiveList = selectedIngredientsList.querySelectorAll("li");
-    for (let i = 0; i < DOMIngredientActiveList.length; i++) {
-        const DOMActiveIngredient = DOMIngredientActiveList[i];
-        DOMActiveIngredient.addEventListener("click", () => {
-            activeIngredientFilter.splice(i, 1);
-            displayActiveIngredientFilter();
+    const DOMIActiveList = filterObject.selectedList.querySelectorAll("li");
+    for (let i = 0; i < DOMIActiveList.length; i++) {
+        const DOMActiveElement = DOMIActiveList[i];
+        DOMActiveElement.addEventListener("click", () => {
+            filterObject.activeFilter.splice(i, 1);
+            displayActiveFilter(filterObject);
         });
     }
 
-    const DOMActiveBanner = activeIngredientsBanner.querySelectorAll("li");
-    for (let i = 0; i < DOMActiveBanner.length; i++) {
-        const DOMActiveIngredient = DOMActiveBanner[i];
-        DOMActiveIngredient.addEventListener("click", () => {
-            activeIngredientFilter.splice(i, 1);
-            displayActiveIngredientFilter();
-        });
-    }
+    displayActiveBanner();
 
     getSecondarySearchRecipesModel();
 }
 
+function displayActiveBanner() {
+    activeFiltersBanner.innerHTML = "";
+    const activeBannerFilters = ingredientsObject.activeFilter.concat(appareilsObject.activeFilter).concat(ustensilesObject.activeFilter);
+
+    activeBannerFilters.forEach((activeElement) => {
+        const li = document.createElement("li");
+        li.textContent = activeElement;
+        const closeLogo = document.createElement("i");
+        closeLogo.classList.add("fa-solid");
+        closeLogo.classList.add("fa-xmark");
+        li.appendChild(closeLogo);
+        activeFiltersBanner.appendChild(li);
+    })
+
+    const DOMActiveBanner = activeFiltersBanner.querySelectorAll("li");
+    for (let i = 0; i < DOMActiveBanner.length; i++) {
+        const DOMActiveElement = DOMActiveBanner[i];
+        DOMActiveElement.addEventListener("click", () => {
+            if (ingredientsObject.activeFilter.indexOf(DOMActiveElement.textContent) !== -1){
+                ingredientsObject.activeFilter.splice(i, 1);
+                displayActiveFilter(ingredientsObject);
+                console.log("ingredient")
+            }
+            else if (appareilsObject.activeFilter.indexOf(DOMActiveElement.textContent) !== -1){
+                appareilsObject.activeFilter.splice(i, 1);
+                displayActiveFilter(appareilsObject);
+                console.log("appareil")
+            }
+            else if (ustensilesObject.activeFilter.indexOf(DOMActiveElement.textContent) !== -1){
+                ustensilesObject.activeFilter.splice(i, 1);
+                displayActiveFilter(ustensilesObject);
+                console.log("ustensile")
+            }
+        });
+    }
+}
+
 function getSecondarySearchRecipesModel() {
     let secondarySearchRecipesModel = recipesModel;
-    activeIngredientFilter.forEach( (activeIngredient) => {
+    ingredientsObject.activeFilter.forEach((activeIngredient) => {
         secondarySearchRecipesModel = secondarySearchRecipesModel.filter((recipeModel) => {
             const recipeSearchDatas = recipeModel.getRecipeIngredientsList();
             return (recipeSearchDatas.indexOf(activeIngredient) !== -1);
         });
     })
+    // Faire pareil avec appareils et ustensiles
+
+    
     displayData(secondarySearchRecipesModel);
-    fillIngredientFilter(secondarySearchRecipesModel);
-    displayIngredientFilter(initialIngredientsList);
+    
+    fillFilter(secondarySearchRecipesModel, ingredientsObject);
+    displayFilter(ingredientsObject);
+    // Faire pareil avec appareils et ustensiles
+
+
 }

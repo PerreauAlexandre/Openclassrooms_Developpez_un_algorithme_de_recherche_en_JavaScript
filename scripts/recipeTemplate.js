@@ -22,6 +22,14 @@ class RecipeTemplate {
         return this._description;
     }
 
+    get appliance() {
+        return this._appliance;
+    }
+
+    get ustensils() {
+        return this._ustensils;
+    }
+
     getRecipeCardDOM() {
         const article = document.createElement("article");
         article.classList.add("recipe-card");

@@ -249,21 +249,15 @@ main {
     font-size: 21px;
 }
 
-/* Actives filters */
-.active-filters {
+/* Actives filters banner*/
+.active-filters-banner {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
     padding: 20px 100px 0 100px;
 }
 
-.active-filters ul {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
-.active-filters li {
+.active-filters-banner li {
     width: 203px;
     height: 53px;
     border-radius: 10px;
