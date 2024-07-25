@@ -65,7 +65,22 @@ const mainSearchInput = document.querySelector(".main-search-input");
 const searchBtn = document.querySelector(".search-btn");
 const clearBtn = document.querySelector(".clear-btn");
 
-mainSearchInput.addEventListener("input", (e) => {
+mainSearchInput.addEventListener("input",  debounce(handleInput)); 
+
+// Fonction de debounce
+function debounce(func) {
+    const wait = 500;
+    let timeout;
+    return function(event) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            func(event);
+        }, wait);
+    };
+}
+
+// Gestionnaire d'événement pour l'input avec debounce
+function handleInput(e) {
     const inputValue = e.target.value
     if (inputValue.length >= 3) {
         clearBtn.style.display = "flex";
@@ -80,7 +95,7 @@ mainSearchInput.addEventListener("input", (e) => {
     }
     displayData(recipesModel);
     initSecondaryFilters();
-});
+}
 
 mainSearchForm.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -186,8 +201,6 @@ function initSecondaryFilter(filterObject) {
     displayActiveFilter(filterObject);
 }
 
-
-
 // On rempli en fonction des attributs des recetes affichés sur la page le filtre secondaire passé en paramètre
 function fillFilter(recipes, filterObject) {
     filterObject.initialList = [];
@@ -261,7 +274,7 @@ function initSecondarySearch(filterObject) {
     });
 }
 
-
+// On affiche dans le menu déroulant les différents filtres actifs du filtre secondaire passé en paramètre 
 const activeFiltersBanner = document.querySelector(".active-filters-banner");
 function displayActiveFilter(filterObject) {
     filterObject.selectedList.innerHTML = "";
@@ -286,6 +299,7 @@ function displayActiveFilter(filterObject) {
     getSecondarySearchRecipesModel();
 }
 
+// On affiche la banière qui liste touts les filtres secondaires actifs
 function displayActiveBanner() {
     activeFiltersBanner.innerHTML = "";
     const activeBannerFilters = ingredientsObject.activeFilter.concat(appareilsObject.activeFilter).concat(ustensilesObject.activeFilter);
@@ -305,40 +319,49 @@ function displayActiveBanner() {
         const DOMActiveElement = DOMActiveBanner[i];
         DOMActiveElement.addEventListener("click", () => {
             if (ingredientsObject.activeFilter.indexOf(DOMActiveElement.textContent) !== -1){
-                ingredientsObject.activeFilter.splice(i, 1);
+                const ingredientIndex = ingredientsObject.activeFilter.indexOf(DOMActiveElement.textContent);
+                ingredientsObject.activeFilter.splice(ingredientIndex, 1);
                 displayActiveFilter(ingredientsObject);
-                console.log("ingredient")
             }
             else if (appareilsObject.activeFilter.indexOf(DOMActiveElement.textContent) !== -1){
-                appareilsObject.activeFilter.splice(i, 1);
+                const appareilIndex = appareilsObject.activeFilter.indexOf(DOMActiveElement.textContent);
+                appareilsObject.activeFilter.splice(appareilIndex, 1);
                 displayActiveFilter(appareilsObject);
-                console.log("appareil")
             }
             else if (ustensilesObject.activeFilter.indexOf(DOMActiveElement.textContent) !== -1){
-                ustensilesObject.activeFilter.splice(i, 1);
+                const ustensileIndex = ustensilesObject.activeFilter.indexOf(DOMActiveElement.textContent);
+                ustensilesObject.activeFilter.splice(ustensileIndex, 1);
                 displayActiveFilter(ustensilesObject);
-                console.log("ustensile")
             }
         });
     }
 }
 
+// On met a jour l'affichage des recettes en fonction des filtres secondaires sélectionnés
 function getSecondarySearchRecipesModel() {
     let secondarySearchRecipesModel = recipesModel;
     ingredientsObject.activeFilter.forEach((activeIngredient) => {
         secondarySearchRecipesModel = secondarySearchRecipesModel.filter((recipeModel) => {
-            const recipeSearchDatas = recipeModel.getRecipeIngredientsList();
-            return (recipeSearchDatas.indexOf(activeIngredient) !== -1);
+            return (recipeModel.getRecipeIngredientsList().indexOf(activeIngredient) !== -1);
         });
     })
-    // Faire pareil avec appareils et ustensiles
+    appareilsObject.activeFilter.forEach((activeAppareil) => {
+        secondarySearchRecipesModel = secondarySearchRecipesModel.filter((recipeModel) => {
+            return (recipeModel.appliance === activeAppareil);
+        });
+    })
+    ustensilesObject.activeFilter.forEach((activeUstensile) => {
+        secondarySearchRecipesModel = secondarySearchRecipesModel.filter((recipeModel) => {
+            return (recipeModel.ustensils.indexOf(activeUstensile) !== -1);
+        });
+    })
 
-    
     displayData(secondarySearchRecipesModel);
     
     fillFilter(secondarySearchRecipesModel, ingredientsObject);
     displayFilter(ingredientsObject);
-    // Faire pareil avec appareils et ustensiles
-
-
+    fillFilter(secondarySearchRecipesModel, appareilsObject);
+    displayFilter(appareilsObject);
+    fillFilter(secondarySearchRecipesModel, ustensilesObject);
+    displayFilter(ustensilesObject);
 }
