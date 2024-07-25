@@ -84,15 +84,39 @@ function handleInput(e) {
     const inputValue = e.target.value
     if (inputValue.length >= 3) {
         clearBtn.style.display = "flex";
-        recipesModel = initialRecipesModel.filter((recipeModel) => {
+
+        recipesModel = [];
+
+        for (let i = 0; i < initialRecipesModel.length; i++) {
+            const recipeModel = initialRecipesModel[i];
             const recipeSearchDatas = recipeModel.getRecipeSearchDatas();
-            return recipeSearchDatas.toLowerCase().includes(inputValue.toLowerCase());
-        });
+            
+            const searchDataLower = recipeSearchDatas.toLowerCase();
+            const inputValueLower = inputValue.toLowerCase();
+            
+            let matchFound = false;
+            
+            for (let j = 0; j <= searchDataLower.length - inputValueLower.length; j++) {
+                let k = 0;
+                while (k < inputValueLower.length && searchDataLower[j + k] === inputValueLower[k]) {
+                    k++;
+                }
+                if (k === inputValueLower.length) {
+                    matchFound = true;
+                    break;
+                }
+            }
+            
+            if (matchFound) {
+                recipesModel.push(recipeModel);
+            }
+        }
     }
     else {
         clearBtn.style.display = "none";
         recipesModel = initialRecipesModel;
     }
+
     displayData(recipesModel);
     initSecondaryFilters();
 }
