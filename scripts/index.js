@@ -94,20 +94,7 @@ function handleInput(e) {
             const searchDataLower = recipeSearchDatas.toLowerCase();
             const inputValueLower = inputValue.toLowerCase();
             
-            let matchFound = false;
-            
-            for (let j = 0; j <= searchDataLower.length - inputValueLower.length; j++) {
-                let k = 0;
-                while (k < inputValueLower.length && searchDataLower[j + k] === inputValueLower[k]) {
-                    k++;
-                }
-                if (k === inputValueLower.length) {
-                    matchFound = true;
-                    break;
-                }
-            }
-            
-            if (matchFound) {
+            if (searchDataLower.indexOf(inputValueLower) !== -1) {
                 recipesModel.push(recipeModel);
             }
         }
