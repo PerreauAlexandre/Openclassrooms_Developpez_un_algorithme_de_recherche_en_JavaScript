@@ -53,8 +53,12 @@ function displayData(recipes) {
 
 // Affiche le nombre de recettes
 const recipeNumber = document.querySelector(".recipe-number");
+let lastInputValue = "";
 function displayRecipeNumber(recipes) {
-    recipeNumber.textContent = `${recipes.length} recettes`
+    recipeNumber.textContent = `${recipes.length} recettes`;
+    if (recipes.length === 0) {
+        recipeSection.textContent = `Aucune recette ne contient "${lastInputValue}", vous pouvez chercher "tarte aux pommes", "poisson", etc.`;
+    }
 }
 
 
@@ -81,7 +85,8 @@ function debounce(func) {
 
 // Gestionnaire d'événement pour l'input avec debounce
 function handleInput(e) {
-    const inputValue = e.target.value
+    const inputValue = e.target.value;
+    lastInputValue = inputValue;
     if (inputValue.length >= 3) {
         clearBtn.style.display = "flex";
         recipesModel = initialRecipesModel.filter((recipeModel) => {
@@ -155,8 +160,6 @@ const ingredientsObject = {
     filterList: document.querySelector(".filter--ingredients .secondary-filter-list") 
 }
 
-initSecondarySearch(ingredientsObject);
-
 // On crée un objet appareils
 const appareilsObject = {
     initialList: [],
@@ -169,8 +172,6 @@ const appareilsObject = {
     selectedList: document.querySelector(".filter--appareils .selected-secondary-filter"),
     filterList: document.querySelector(".filter--appareils .secondary-filter-list") 
 }
-
-initSecondarySearch(appareilsObject);
 
 // On crée un objet ustensiles
 const ustensilesObject = {
@@ -185,6 +186,42 @@ const ustensilesObject = {
     filterList: document.querySelector(".filter--ustensiles .secondary-filter-list") 
 }
 
+// On initialise la barre de recherche du filtre secondaire passé en paramètre
+function initSecondarySearch(filterObject) {
+    filterObject.secondarySearchInput.addEventListener("input", (e) => {
+        const inputValue = e.target.value
+        if (inputValue.length >= 3) {
+            filterObject.secondaryClearBtn.style.display = "flex";
+            filterObject.list = filterObject.initialList.filter((listElement) => {
+                return listElement.toLowerCase().includes(inputValue.toLowerCase());
+            });
+        }
+        else {
+            filterObject.secondaryClearBtn.style.display = "none";
+            filterObject.list = filterObject.initialList;
+        }
+        displayFilter(filterObject);
+    });
+    
+    filterObject.secondarySearchForm.addEventListener("submit", (e) => e.preventDefault());
+    
+    filterObject.secondarySearchForm.querySelector('input[type="text"]').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+        }
+    });
+    
+    filterObject.secondaryClearBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        filterObject.secondaryClearBtn.style.display = "none";
+        filterObject.secondarySearchInput.value = "";
+        filterObject.list = filterObject.initialList;
+        displayFilter(filterObject);
+    });
+}
+
+initSecondarySearch(ingredientsObject);
+initSecondarySearch(appareilsObject);
 initSecondarySearch(ustensilesObject);
 
 // On initialise les valeurs de filtres secondaire en fonction de la recherche principale
@@ -240,42 +277,7 @@ function displayFilter(filterObject) {
     });
 }
 
-// On initialise la barre de recherche du filtre secondaire passé en paramètre
-function initSecondarySearch(filterObject) {
-    filterObject.secondarySearchInput.addEventListener("input", (e) => {
-        const inputValue = e.target.value
-        if (inputValue.length >= 3) {
-            filterObject.secondaryClearBtn.style.display = "flex";
-            filterObject.list = filterObject.initialList.filter((listElement) => {
-                return listElement.toLowerCase().includes(inputValue.toLowerCase());
-            });
-        }
-        else {
-            filterObject.secondaryClearBtn.style.display = "none";
-            filterObject.list = filterObject.initialList;
-        }
-        displayFilter(filterObject);
-    });
-    
-    filterObject.secondarySearchForm.addEventListener("submit", (e) => e.preventDefault());
-    
-    filterObject.secondarySearchForm.querySelector('input[type="text"]').addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-        }
-    });
-    
-    filterObject.secondaryClearBtn.addEventListener("click", (e) => {
-        e.preventDefault();
-        filterObject.secondaryClearBtn.style.display = "none";
-        filterObject.secondarySearchInput.value = "";
-        filterObject.list = filterObject.initialList;
-        displayFilter(filterObject);
-    });
-}
-
 // On affiche dans le menu déroulant les différents filtres actifs du filtre secondaire passé en paramètre 
-const activeFiltersBanner = document.querySelector(".active-filters-banner");
 function displayActiveFilter(filterObject) {
     filterObject.selectedList.innerHTML = "";
 
@@ -300,6 +302,7 @@ function displayActiveFilter(filterObject) {
 }
 
 // On affiche la banière qui liste touts les filtres secondaires actifs
+const activeFiltersBanner = document.querySelector(".active-filters-banner");
 function displayActiveBanner() {
     activeFiltersBanner.innerHTML = "";
     const activeBannerFilters = ingredientsObject.activeFilter.concat(appareilsObject.activeFilter).concat(ustensilesObject.activeFilter);
